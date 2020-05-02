@@ -1,0 +1,32 @@
+.parentclass{
+
+  .navbar {
+  height: 70px;
+  width: 100%;
+  display: flex;
+  background-color: black;
+  color: #ffffff;
+}
+
+.login-btn {
+  border: solid 2px #f00;
+  background-color: #22211f;
+  color: #ffffff;
+  box-shadow: none;
+}
+
+.login-btn:hover, .login-btn:focus, .login-btn:active {
+  background-color: rgb(109, 107, 105);
+  color: #ffffff;
+  border: solid 2px rgb(235, 125, 22);
+  outline: none !important;
+  box-shadow: none;
+}
+
+.box {
+  box-model: border-box;
+  border: 3px solid transparent;
+  background-clip: padding-box;
+  box-shadow: 5px 10px rgba(121, 116, 116, 0.36) 5px 10px;
+}
+}
