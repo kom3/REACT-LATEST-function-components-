@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import './App.scss';
 import Chart from "react-apexcharts";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
 
 const graph_config = {
   chart: {
@@ -44,13 +50,49 @@ const Login = () => {
 const Childcomponent = (props) => {
   return (
     <>
-      <p>Iam a Childcomponent Iam accessing my parent's (Main component's) state, ie. <br />state: Graph name: {props.dadsprop[0]["name"]}<br />Grapg values: {props.dadsprop[0]["data"]}</p>
+      <p>Iam a Childcomponent Iam accessing my parent's (Main component's) state, ie. <br />state: Graph name: {props.dadsprop[0]["name"]}<br />Grapg values: {props.dadsprop[0]["data"]} 
+       (Parent sent me this as props)
+      </p>
       <br /><br />
 
       <button className="btn btn-danger" onClick={() => { props.func("I Love My Mama and Papa") }}>Send data back to PARENT  from CHILD</button>
     </>
   )
 }
+
+const Nextcomponent = () => {
+  return (<><a href="/">Go back to Main component</a>
+    <p>Iam Next component. You just navigated from Mian component to me.</p>
+  </>
+
+  )
+}
+const Not_found = () => {
+  return (<><h2>Iam Not found component!</h2><br /><br />
+    <a href="/">Goto main component</a><br /><br />
+    <a href="/next">Goto Next component</a>
+  </>)
+}
+
+const Routercomponent = (props) => {
+  return (
+    <Router>
+      <Switch>
+        <Route exact path="/">    {/*exact is must for "/" path or esle othefr components will not load.*/}
+          <Main />
+        </Route>
+        <Route path="/next">
+          <Nextcomponent />
+        </Route>
+        <Route>
+          <Not_found />
+        </Route>
+      </Switch>
+    </Router>
+  )
+
+}
+
 const Main = (props) => {
   const [fire, inthehole] = useState(0)
   const [display, loadersh] = useState("show")
@@ -60,13 +102,15 @@ const Main = (props) => {
 
   const Iamcallingfromchild = (argfromchild) => {
 
-    setmsg(<p>Mychild sent me this : {argfromchild}</p>)
+    setmsg(<p>Mychild sent me this : {argfromchild}. <div>(I sent one of my function to my child as props and he called that)</div></p>)
 
   }
 
-  useEffect(() => { document.title = ele + " " +display}, [fire, display])
+  useEffect(() => { document.title = ele + " " + display; alert("title WillUpdate");}, [fire, display]) /*componentWillUpdate for fire and display */
+  useEffect(() => { return alert("Main componentDidMount!")}, [])               /*componentDidMount*/
+  useEffect(()=>{ return ()=>{ alert("Main componentWillUnmount!")}},[])     /*componentWillUnmount */
 
-  
+
   const toggle = () => {
     if (display === "hide") {
       loadersh("show")
@@ -85,13 +129,13 @@ const Main = (props) => {
         <div className="navbar"><div>Navbar</div> <div><button className="btn-success btn login-btn" data-toggle="modal" data-target="#myModal">Login</button></div></div>
         <div className="row" style={{ padding: '5px', display: 'flex', justifyContent: 'space-arround' }}>
           <div className="col-md-2 box" style={{ backgroundColor: '#ffffff', height: '400px' }}>
-            Created by {props.name}<br/>
+            Created by {props.name}<br />
             <Loader display_status={display} />
           </div>
           <div className="col-md-5 box" style={{ backgroundColor: '#ffffff', height: '400px' }}>
             <div className="col-md-12">
               <p>{fire === 0 ? "Zero" : fire}</p>
-              <Childcomponent dadsprop={series} func={Iamcallingfromchild} /><br/><br/>
+              <Childcomponent dadsprop={series} func={Iamcallingfromchild} /><br /><br />
               <p>Waiting for message from child: {msg}</p>
             </div>
           </div>
@@ -113,8 +157,12 @@ const Main = (props) => {
         <br />
         <button className="btn btn-success" onClick={() => inthehole(fire + 1)}>Increment (Observe page title)</button>&nbsp;
         <button className="btn btn-success" onClick={() => toggle()}>Start/Stop loader</button>&nbsp;
-        <button className="btn btn-success" onClick={() => generategraph()}>Generate graph</button>
-        <br /><br /><br />
+        <button className="btn btn-success" onClick={() => generategraph()}>Generate graph</button><br/>
+        <a href="/next">1. Goto Next component(using anchor tag href="/path":&nbsp;componentWillUnmount not works!!)</a> <br />
+        <Link to="/next">2. Goto Next component(using Link tag to="/path":&nbsp;componentWillUnmount works!!)</Link><br/>
+        <button className="btn btn-success" onClick={() => window.location.assign("/next")}>Goto Nextcomponent using window.location.assign():<br/>componentWillUnmount not works!</button>&nbsp;
+        <button className="btn btn-success" onClick={() => window.open("/next")}>Goto Nextcomponent using window.open():<br/>componentWillUnmount not works!</button>
+        <br/><br/><br/>
       </div>
     </div>
 
@@ -133,4 +181,4 @@ const Loader = (props) => {
   }
 }
 
-export default Main;
+export default Routercomponent;

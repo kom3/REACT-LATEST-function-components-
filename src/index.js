@@ -1,14 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.scss';
-import Main from './App.jsx';
+import Routercomponent from './App.jsx';
 import * as serviceWorker from './serviceWorker';
-import $ from 'jquery';
 import "bootstrap/dist/js/bootstrap.bundle.js"
 
 ReactDOM.render(
   <React.StrictMode>
-    <Main name="me"/>
+    <Routercomponent />
   </React.StrictMode>,
   document.getElementById('root')
 );
